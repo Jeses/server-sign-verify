@@ -17,7 +17,7 @@ Pull this package in through Composer.
 ```
 
 or run in terminal:
-`composer require liuyuanjun/ssapi`
+`composer require zhengcai/ssapis`
 
 then copy the config file
 
