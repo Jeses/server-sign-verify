@@ -1,0 +1,33 @@
+{
+    "name": "zhengcai/ssapi",
+    "description": "A simple Laravel server to server api sign and verify class. ",
+    "version": "1.0.0-alpha",
+    "keywords": ["laravel", "api", "sign", "verify"],
+    "homepage": "https://github.com/Jeses/server-sign-verify.git",
+    "authors": [
+        {
+            "name": "Zhengcai",
+            "email": "yz_luck@163.com"
+        }
+    ],
+    "license": "MIT",
+    "require": {
+        "php": ">=7.0",
+        "ixudra/curl": "6.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Zhengcai\\SsApi\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Zhengcai\\SsApi\\SsApiServiceProvider"
+            ],
+            "aliases": {
+                "SsApi": "Zhengcai\\SsApi\\Facades\\SsApi"
+            }
+        }
+    }
+}
