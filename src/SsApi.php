@@ -53,11 +53,11 @@ class SsApi
      * @return array
      * @throws \Exception
      */
-    public function request($api, $data = [], $method = 'get', $headers = [])
+    public function request($api, $data = [], $headers = [], $method = 'get')
     {
         $this->sign($data);
         // 用法：https://github.com/ixudra/curl
-        $curl = Curl::to($this->apiUrl . '/' . rtrim($api, '/'));
+        $curl = Curl::to($this->apiUrl . '/' . trim($api, '/'));
         App::environment('local') && $curl->enableDebug(storage_path('logs/ssapi-curl.log'));
         $response = $curl->withData($data)
             ->withHeaders($headers)
