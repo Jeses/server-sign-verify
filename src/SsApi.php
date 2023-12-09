@@ -64,7 +64,9 @@ class SsApi
 		// 用法：https://github.com/ixudra/curl
 		$url = $this->apiUrl . '/' . trim($api, '/');
 		$curl = Curl::to($url);
+
 		App::environment('local') && $curl->enableDebug(storage_path('logs/ssapi-curl.log'));
+		self::writeRequestLog($url, $data, $method, $headers);
 
 		// 使用Curl请求
 		$response = $curl->withData($data)
@@ -75,7 +77,6 @@ class SsApi
 
 		if (empty($response)) {
 			// 如果Curl处理失败则使用GuzzleHttp进行请求,看具体报什么错误
-			$curl->enableDebug(storage_path('logs/ssapi-curl.log'));
 			if ($method == 'get') {
 				$url = $url . '?' . http_build_query($data);
 			}
@@ -94,11 +95,12 @@ class SsApi
 			$response = $request->getBody()->getContents();
 			$response = json_decode($response, true) ?? [];
 
-			$logFile = self::getLogFile('.debug.log');
-			$logModel = new \Monolog\Logger("[WARNING]");
-			$logModel->pushHandler(new StreamHandler(storage_path($logFile), 200));
-			$logModel->info($response);
-			throw new \Exception('curl请求失败，详细内容请查看日志文件:' . $logFile);
+		}
+
+		self::writeResponseLog($response);
+
+		if (empty($response)) {
+			throw new \Exception('SsApi请求失败，调试请开启env APP_DEBUG=true' );
 		}
 		return $response;
 	}
@@ -218,6 +220,25 @@ class SsApi
 		return $response;
 	}
 
+	protected static function writeRequestLog($url = '', $data = [], $method = '', $headers = [])
+	{
+		if (env('APP_DEBUG', false)) {
+			$logFile = self::getLogFile('.ssapi.log');
+			$logModel = new \Monolog\Logger("[WARNING]");
+			$logModel->pushHandler(new StreamHandler(storage_path($logFile), 200));
+			$logModel->info('SsApi Curl request', ['url' => $url, 'data' => $data, 'method' => $method, 'headers' => $headers]);
+		}
+	}
+
+	protected static function writeResponseLog($response = [])
+	{
+		if (env('APP_DEBUG', false)) {
+			$logFile = self::getLogFile('.ssapi.log');
+			$logModel = new \Monolog\Logger("[WARNING]");
+			$logModel->pushHandler(new StreamHandler(storage_path($logFile), 200));
+			$logModel->info('SsApi Curl response', ['response' => $response]);
+		}
+	}
 
 	protected static function getLogFile($ext = 'log')
 	{
