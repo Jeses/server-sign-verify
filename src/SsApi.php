@@ -70,7 +70,7 @@ class SsApi
 		$response = $curl->withData($data)
 			->withHeaders($headers)
 			->withOption('SSL_VERIFYPEER', false)
-			->asJson()
+			->asJson(true)
 			->$method();
 
 		if (empty($response)) {
@@ -118,7 +118,7 @@ class SsApi
 		if (!in_array($name, ['get', 'post', 'put', 'patch', 'delete']))
 			throw new \Exception('undefined method.');
 		return retry($this->_retryTimes, function () use ($name, $arguments) {
-			return $this->request($arguments[0], $arguments[1] ?? [], $name, $arguments[2] ?? []);
+			return $this->request($arguments[0], $arguments[1] ?? [], $arguments[2] ?? [],$name);
 		}, 0);
 	}
 
