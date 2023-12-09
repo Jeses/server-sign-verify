@@ -1,7 +1,7 @@
 {
     "name": "zhengcai/ssapi",
     "description": "A simple Laravel server to server api sign and verify class. ",
-    "version": "1.1.0",
+    "version": "v1.1.0",
     "keywords": ["laravel", "api", "sign", "verify"],
     "homepage": "https://github.com/Jeses/server-sign-verify.git",
     "authors": [
