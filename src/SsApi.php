@@ -58,7 +58,7 @@ class SsApi
 	 * @return array
 	 * @throws \Exception
 	 */
-	public function request($api, $data = [], $headers = [], $method = 'get')
+	public function request($api, $data = [], $method = 'get', $headers = [])
 	{
 		$this->sign($data);
 		// 用法：https://github.com/ixudra/curl
@@ -118,7 +118,7 @@ class SsApi
 		if (!in_array($name, ['get', 'post', 'put', 'patch', 'delete']))
 			throw new \Exception('undefined method.');
 		return retry($this->_retryTimes, function () use ($name, $arguments) {
-			return $this->request($arguments[0], $arguments[1] ?? [], $arguments[2] ?? [],$name);
+			return $this->request($arguments[0], $arguments[1] ?? [], $name, $arguments[2] ?? []);
 		}, 0);
 	}
 
