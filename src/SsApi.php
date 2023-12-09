@@ -94,13 +94,11 @@ class SsApi
 			$response = $request->getBody()->getContents();
 			$response = json_decode($response, true) ?? [];
 
-			if (empty($response)) {
-				$logFile = self::getLogFile('.wf.log');
-				$logModel = new \Monolog\Logger("[WARNING]");
-				$logModel->pushHandler(new StreamHandler(storage_path($logFile), 200));
-				$logModel->info(self::$errorMsg);
-				throw new \Exception('curl请求失败，详细内容请查看日志文件:' . $logFile);
-			}
+			$logFile = self::getLogFile('.debug.log');
+			$logModel = new \Monolog\Logger("[WARNING]");
+			$logModel->pushHandler(new StreamHandler(storage_path($logFile), 200));
+			$logModel->info($response);
+			throw new \Exception('curl请求失败，详细内容请查看日志文件:' . $logFile);
 		}
 		return $response;
 	}
